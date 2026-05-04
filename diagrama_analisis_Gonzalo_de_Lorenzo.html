@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f6fa;
+  width: 1380px;
+  padding: 18px;
+  color: #222;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #003366 0%, #1A6B8A 100%);
+  color: white;
+  padding: 14px 22px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.header h1 { font-size: 17px; font-weight: 700; letter-spacing: 0.3px; }
+.header .sub { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+.header .author { font-size: 12px; text-align: right; opacity: 0.9; }
+
+/* ── PHASE STRIP ── */
+.phases {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.phase-card {
+  background: white;
+  border-radius: 8px;
+  padding: 14px 16px;
+  border-left: 5px solid #1A6B8A;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.phase-card.right { border-left-color: #C0392B; }
+.phase-card .phase-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #1A6B8A;
+  margin-bottom: 8px;
+}
+.phase-card.right .phase-title { color: #C0392B; }
+.phase-card .items { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  background: #EAF4FB;
+  color: #003366;
+  font-size: 9.5px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  border: 1px solid #B8D8ED;
+}
+.chip.red { background: #FDECEA; color: #7B0000; border-color: #E8B8B8; }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #003366;
+  margin: 4px 0 12px 0;
+  position: relative;
+}
+.section-label::before, .section-label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background: #B0C4D8;
+}
+.section-label::before { left: 0; }
+.section-label::after  { right: 0; }
+
+/* ── QUESTIONS ── */
+.questions {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.q-card {
+  background: white;
+  border-radius: 8px;
+  padding: 10px 10px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  border-top: 4px solid #1A6B8A;
+}
+.q-card:nth-child(2) { border-top-color: #E67E22; }
+.q-card:nth-child(3) { border-top-color: #6C3483; }
+.q-card:nth-child(4) { border-top-color: #C0392B; }
+.q-card:nth-child(5) { border-top-color: #117A65; }
+.q-num { font-size: 18px; font-weight: 800; color: #003366; line-height: 1; margin-bottom: 4px; }
+.q-card:nth-child(2) .q-num { color: #E67E22; }
+.q-card:nth-child(3) .q-num { color: #6C3483; }
+.q-card:nth-child(4) .q-num { color: #C0392B; }
+.q-card:nth-child(5) .q-num { color: #117A65; }
+.q-text { font-size: 9.5px; color: #444; line-height: 1.4; }
+
+/* ── MAIN CONTENT ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.5fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+/* Findings column */
+.findings-col { display: flex; flex-direction: column; gap: 8px; }
+.finding-card {
+  background: white;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.f-badge {
+  min-width: 26px; height: 26px;
+  background: #003366;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.finding-card:nth-child(2) .f-badge { background: #E67E22; }
+.finding-card:nth-child(3) .f-badge { background: #6C3483; }
+.finding-card:nth-child(4) .f-badge { background: #C0392B; }
+.finding-card:nth-child(5) .f-badge { background: #117A65; }
+.f-content { flex: 1; }
+.f-title { font-size: 9.5px; font-weight: 700; color: #003366; margin-bottom: 2px; }
+.f-title.orange { color: #E67E22; }
+.f-title.purple { color: #6C3483; }
+.f-title.red    { color: #C0392B; }
+.f-title.green  { color: #117A65; }
+.f-val { font-size: 9px; color: #555; line-height: 1.4; }
+.f-metric { font-size: 8.5px; color: #777; font-style: italic; margin-top: 1px; }
+
+/* Central column */
+.central-col {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  overflow: hidden;
+}
+.central-header {
+  background: linear-gradient(135deg, #C0392B 0%, #922B21 100%);
+  color: white;
+  padding: 12px 16px;
+  text-align: center;
+}
+.central-header .big-num { font-size: 40px; font-weight: 800; color: #FFE082; line-height: 1; }
+.central-header .big-sub { font-size: 9.5px; opacity: 0.85; margin-top: 2px; }
+.central-header .htitle { font-size: 10.5px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.3px; }
+.central-body { padding: 12px 14px; }
+.model-pill {
+  background: #EAF4FB;
+  border: 1.5px solid #1A6B8A;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  font-size: 9.5px;
+  color: #003366;
+  font-weight: 600;
+  text-align: center;
+}
+.hyp-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 6px;
+  background: #f8f9fc;
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+.hyp-badge {
+  font-size: 8.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+.hyp-badge.b1 { background: #1A6B8A; color: white; }
+.hyp-badge.b2 { background: #E67E22; color: white; }
+.hyp-badge.b3 { background: #C0392B; color: white; }
+.hyp-badge.b4 { background: #117A65; color: white; }
+.hyp-text { font-size: 9px; color: #333; line-height: 1.45; }
+.hyp-text strong { color: #003366; }
+.insight-note {
+  margin-top: 8px;
+  background: #FFF8E1;
+  border-left: 3px solid #F39C12;
+  border-radius: 0 6px 6px 0;
+  padding: 6px 8px;
+  font-size: 8.5px;
+  color: #555;
+  font-style: italic;
+}
+
+/* Recos column */
+.reco-col { display: flex; flex-direction: column; gap: 6px; }
+.reco-group {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+.reco-group-header {
+  padding: 6px 12px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: white;
+}
+.reco-group-header.neg  { background: #E67E22; }
+.reco-group-header.prod { background: #1A6B8A; }
+.reco-group-header.tech { background: #6C3483; }
+.reco-item {
+  padding: 5px 12px;
+  font-size: 9px;
+  color: #333;
+  border-bottom: 1px solid #F0F0F0;
+  line-height: 1.4;
+}
+.reco-item:last-child { border-bottom: none; }
+.reco-item .r-num { font-weight: 700; color: #003366; margin-right: 2px; }
+
+/* ── CONCLUSION BAR ── */
+.concl {
+  background: #003366;
+  color: white;
+  border-radius: 8px;
+  padding: 12px 18px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.concl-icon { font-size: 24px; }
+.concl-text h3 { font-size: 11px; font-weight: 700; color: #FFE082; margin-bottom: 4px; }
+.concl-text p  { font-size: 9.5px; line-height: 1.5; opacity: 0.9; }
+
+/* ── FOOTER ── */
+.footer {
+  font-size: 8.5px;
+  color: #888;
+  margin-top: 8px;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="h1">ANÁLISIS DE NEGOCIO · Flujo del Proceso</div>
+    <div class="sub">Predicción en Tiempo Real del Churn — HBO Max</div>
+  </div>
+  <div class="author">Gonzalo De Lorenzo Gracia<br>UFV Madrid · 2025–2026</div>
+</div>
+
+<!-- PHASE INPUTS -->
+<div class="phases">
+  <div class="phase-card">
+    <div class="phase-title">⚙ Ingeniería del dato → Inputs del análisis</div>
+    <div class="items">
+      <span class="chip">Dataset sintético: 5K reg · 11 vars</span>
+      <span class="chip">Dataset enriquecido: 5K reg · 9 vars sesión</span>
+      <span class="chip">Dataset integrado: 10K registros · 20 vars</span>
+      <span class="chip">Churn global: 18,2% · ratio 4,5:1</span>
+      <span class="chip">Feature Eng: 6 vars derivadas</span>
+      <span class="chip">Dataset final: 45 variables codificadas</span>
+    </div>
+  </div>
+  <div class="phase-card right">
+    <div class="phase-title">📊 Análisis del dato → Modelos y resultado central</div>
+    <div class="items">
+      <span class="chip red">★ Reg. Logística: AUC=0,782 · Recall=0,741</span>
+      <span class="chip red">Random Forest: AUC=0,772 · Overfitting 22%</span>
+      <span class="chip red">Gradient Boosting: AUC=0,772 · Overfitting 17%</span>
+      <span class="chip red">Umbral óptimo: 0,37 · 3 segmentos de riesgo</span>
+      <span class="chip red">Top vars: satisfaction · watch_hours · tickets</span>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTIONS SECTION -->
+<div class="section-label">5 Preguntas de Investigación Adaptadas</div>
+<div class="questions">
+  <div class="q-card"><div class="q-num">P1</div><div class="q-text">Variables predictoras del churn en HBO Max</div></div>
+  <div class="q-card"><div class="q-num">P2</div><div class="q-text">Perfiles de suscriptores en riesgo de churn</div></div>
+  <div class="q-card"><div class="q-num">P3</div><div class="q-text">Modelo de ML más adecuado para retención</div></div>
+  <div class="q-card"><div class="q-num">P4</div><div class="q-text">Umbral de decisión óptimo para intervención</div></div>
+  <div class="q-card"><div class="q-num">P5</div><div class="q-text">Recomendaciones para toma de decisiones</div></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-grid">
+
+  <!-- FINDINGS -->
+  <div class="findings-col">
+    <div style="font-size:10px;font-weight:700;color:#003366;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:2px;">Hallazgos por Pregunta</div>
+    <div class="finding-card">
+      <div class="f-badge">1</div>
+      <div class="f-content">
+        <div class="f-title">Predictores dominantes</div>
+        <div class="f-val">Satisfacción &gt; Horas visionado &gt; Tickets soporte</div>
+        <div class="f-metric">Consistente en los 3 modelos evaluados</div>
+      </div>
+    </div>
+    <div class="finding-card">
+      <div class="f-badge">2</div>
+      <div class="f-content">
+        <div class="f-title orange">4 perfiles de riesgo</div>
+        <div class="f-val">Nuevo bajo uso · Plan mensual · at_risk_service · Fiel</div>
+        <div class="f-metric">Alto riesgo: 40,1% churn real vs. 7,5% bajo riesgo</div>
+      </div>
+    </div>
+    <div class="finding-card">
+      <div class="f-badge">3</div>
+      <div class="f-content">
+        <div class="f-title purple">Reg. Logística óptima</div>
+        <div class="f-val">AUC=0,782 · Recall=0,741 · Sin overfitting</div>
+        <div class="f-metric">Gap train-test 1,1% — apto para producción</div>
+      </div>
+    </div>
+    <div class="finding-card">
+      <div class="f-badge">4</div>
+      <div class="f-content">
+        <div class="f-title red">Umbral 0,37</div>
+        <div class="f-val">Maximiza F1. Prioriza detección sobre precisión</div>
+        <div class="f-metric">Coherente con coste asimétrico del churn</div>
+      </div>
+    </div>
+    <div class="finding-card">
+      <div class="f-badge">5</div>
+      <div class="f-content">
+        <div class="f-title green">8 Recomendaciones</div>
+        <div class="f-val">3 niveles: Negocio · Producto · Técnico</div>
+        <div class="f-metric">Ver columna derecha →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTRAL CARD -->
+  <div class="central-col">
+    <div class="central-header">
+      <div class="htitle">⚠ HALLAZGO CENTRAL — PERÍODO CRÍTICO DE FIDELIZACIÓN</div>
+      <div class="big-num">0 – 6</div>
+      <div class="big-sub">meses · Tasa de churn duplica la media global en este período</div>
+    </div>
+    <div class="central-body">
+      <div class="model-pill">Modelo LR (umbral 0,37) · Alto riesgo: 40,1% churn real · Bajo riesgo: 7,5% churn real</div>
+
+      <div class="hyp-row">
+        <span class="hyp-badge b1">H1 — USO</span>
+        <div class="hyp-text"><strong>low_usage (&lt;10 h/mes):</strong> Churn 2–3× superior a la media. Señal de alarma más fiable y accionable.</div>
+      </div>
+      <div class="hyp-row">
+        <span class="hyp-badge b2">H2 — PLAN</span>
+        <div class="hyp-text"><strong>Plan mensual:</strong> Brecha estructural &gt;20 pp frente al plan anual. Menor compromiso contractual.</div>
+      </div>
+      <div class="hyp-row">
+        <span class="hyp-badge b3">H3 — SERVICIO ★</span>
+        <div class="hyp-text"><strong>at_risk_service</strong> (tickets≥3 y satisfacción≤2): Churn triple a la media. Primera prioridad de recuperación.</div>
+      </div>
+      <div class="hyp-row">
+        <span class="hyp-badge b4">H4 — ORIGINAL</span>
+        <div class="hyp-text"><strong>hbo_original_share &gt;50%:</strong> Factor de fidelización diferencial. Reduce el churn por debajo de la media.</div>
+      </div>
+      <div class="insight-note">
+        Suscriptores &gt;24 meses muestran churn &lt;14% incluso bajo presión → descarta la explicación coyuntural del abandono.
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOS COLUMN -->
+  <div class="reco-col">
+    <div style="font-size:10px;font-weight:700;color:#003366;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:2px;">Recomendaciones (8 en 3 niveles)</div>
+    <div class="reco-group">
+      <div class="reco-group-header neg">📣 Negocio</div>
+      <div class="reco-item"><span class="r-num">R1</span> Onboarding activo meses 1–6</div>
+      <div class="reco-item"><span class="r-num">R2</span> Alertas automáticas por bajo uso (&lt;10 h)</div>
+      <div class="reco-item"><span class="r-num">R3</span> Incentivos migración plan anual (mes 3+)</div>
+    </div>
+    <div class="reco-group">
+      <div class="reco-group-header prod">🎯 Producto</div>
+      <div class="reco-item"><span class="r-num">R4</span> Protocolo recuperación at_risk_service</div>
+      <div class="reco-item"><span class="r-num">R5</span> Potenciar recomendaciones de originales HBO</div>
+      <div class="reco-item"><span class="r-num">R6</span> Monitorizar efecto método de pago en churn</div>
+    </div>
+    <div class="reco-group">
+      <div class="reco-group-header tech">⚙ Técnico</div>
+      <div class="reco-item"><span class="r-num">R7</span> Dashboard retención en tiempo real (LR+CRM)</div>
+      <div class="reco-item"><span class="r-num">R8</span> Explorar LSTM con datos de sesión reales</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONCLUSION -->
+<div class="concl">
+  <div class="concl-icon">📌</div>
+  <div class="concl-text">
+    <h3>Conclusiones</h3>
+    <p>HBO Max presenta un patrón de churn estructuralmente predecible: el uso efectivo del servicio —especialmente en los primeros 6 meses—, la satisfacción del cliente y el tipo de plan son los determinantes principales del abandono. La Regresión Logística con umbral 0,37 ofrece la herramienta más eficiente para la retención preventiva (AUC=0,782; Recall=0,741; sin overfitting). Las 8 recomendaciones formuladas establecen una hoja de ruta para negocio, producto e ingeniería orientada a proteger los ingresos recurrentes y maximizar el valor de vida del cliente en HBO Max.</p>
+  </div>
+</div>
+
+<div class="footer">
+  Fuente: elaboración propia a partir de datos sintéticos calibrados con HBO Max España (2025), Reuters Institute y CNMC. Herramientas: Python 3.12 (scikit-learn, Pandas) · GitHub: gonzalodelorenzograciaweb/HBOMAX_CHURN_GONZALO_DE_LORENZO_TFG
+</div>
+
+</body>
+</html>
